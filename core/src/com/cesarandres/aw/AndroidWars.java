@@ -2,20 +2,32 @@ package com.cesarandres.aw;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 
 public class AndroidWars extends ApplicationAdapter {
 
 	private GameWorld match;
+	private OrthoCamController controller;
 	private GameUI ui;
 	
 	@Override
 	public void create() {				
-		this.match = new GameWorld();
 		this.ui = new GameUI();
 		
-		Gdx.input.setInputProcessor(ui);
-		Gdx.input.setInputProcessor(match);
+		OrthographicCamera camera = new OrthographicCamera();
+		
+		this.match = new GameWorld(camera);
+		this.controller = new OrthoCamController(camera);
+
+		InputMultiplexer multiplexer = new InputMultiplexer();
+		
+		multiplexer.addProcessor(ui);
+		multiplexer.addProcessor(match);
+		multiplexer.addProcessor(controller);
+
+		Gdx.input.setInputProcessor(multiplexer);
 	}
 
 	@Override
