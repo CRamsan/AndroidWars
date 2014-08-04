@@ -1,5 +1,7 @@
 package com.cesarandres.aw;
 
+import java.util.HashSet;
+
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -18,6 +20,8 @@ public class GameWorld extends Stage{
 	private TiledMapRenderer renderer;
 	private AssetManager assetManager;
 
+	private HashSet<Player> players;
+	
 	public GameWorld (OrthographicCamera camera) {
 		super(new ScreenViewport(camera));
 		this.camera = camera;
@@ -32,11 +36,12 @@ public class GameWorld extends Stage{
 		this.assetManager.finishLoading();
 		this.map = assetManager.get("desert.tmx");
 		this.renderer = new OrthogonalTiledMapRenderer(map);
-
-		GameObject test = new GameObject();
-		this.addActor(test);
 	}
 
+	public boolean addPlayer(Player player){
+		return this.players.add(player);
+	}
+	
 	@Override
 	public void draw(){
 		this.camera.update();
@@ -44,7 +49,7 @@ public class GameWorld extends Stage{
 		this.renderer.render();
 		super.draw();
 	}
-		
+			
 	public void resize(int width, int height){
 		this.getViewport().update(width, height);
 	}
