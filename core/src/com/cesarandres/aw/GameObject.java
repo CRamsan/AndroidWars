@@ -1,8 +1,5 @@
 package com.cesarandres.aw;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -13,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 
 public class GameObject extends Actor {
-	private TextureRegion region;
 	private Texture texture;
 	private float stateTime;
 	private Animation leftWalk;
@@ -21,7 +17,6 @@ public class GameObject extends Actor {
 
 	public GameObject() {
 		this.texture = new Texture("CWT_INFT.png");
-		this.region = new TextureRegion(this.texture);
 		TextureRegion[] leftWalkFrames = TextureRegion.split(this.texture, 32,
 				32)[0];
 		TextureRegion[] rightWalkFrames = new TextureRegion[leftWalkFrames.length];
@@ -53,13 +48,7 @@ public class GameObject extends Actor {
 	}
 
 	@Override
-	public void draw(Batch batch, float parentAlpha) {
-		/*Color color = getColor();
-		batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
-		batch.draw(region, getX(), getY(), getOriginX(), getOriginY(),
-				getWidth(), getHeight(), getScaleX(), getScaleY(),
-				getRotation());*/
-		
+	public void draw(Batch batch, float parentAlpha) {		
 		batch.draw(rightWalk.getKeyFrame(this.stateTime, true), this.getX(), this.getY());
 	}
 
