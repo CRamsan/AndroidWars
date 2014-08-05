@@ -1,6 +1,7 @@
 package com.cesarandres.aw;
 
 import java.util.HashSet;
+import java.util.Iterator;
 
 public class Player {
 	private int ID;
@@ -12,6 +13,8 @@ public class Player {
 		this.ID = ID;
 		this.belongings = new HashSet<GameObject>();
 		this.world = stage;
+		
+		this.addObject(new GameObject());
 	}
 
 	public int getID() {
@@ -40,5 +43,12 @@ public class Player {
 			this.world.addActor(object);
 		}
 		return success;
+	}
+	
+	public void dispose () {
+		Iterator<GameObject> iter = this.belongings.iterator();
+		while (iter.hasNext()) {
+			iter.next().dispose();
+		}	
 	}
 }

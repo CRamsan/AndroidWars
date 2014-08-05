@@ -1,6 +1,7 @@
 package com.cesarandres.aw;
 
 import java.util.HashSet;
+import java.util.Iterator;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
@@ -36,6 +37,10 @@ public class GameWorld extends Stage{
 		this.assetManager.finishLoading();
 		this.map = assetManager.get("desert.tmx");
 		this.renderer = new OrthogonalTiledMapRenderer(map);
+		
+		this.players = new HashSet<Player>();
+		
+		this.addPlayer(new Player(0, this));
 	}
 
 	public boolean addPlayer(Player player){
@@ -52,5 +57,14 @@ public class GameWorld extends Stage{
 			
 	public void resize(int width, int height){
 		this.getViewport().update(width, height);
+	}
+	
+	@Override
+	public void dispose () {
+		super.dispose();
+		Iterator<Player> iter = this.players.iterator();
+		while (iter.hasNext()) {
+			iter.next().dispose();
+		}	
 	}
 }
