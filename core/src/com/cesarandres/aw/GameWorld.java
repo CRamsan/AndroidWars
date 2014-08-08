@@ -124,6 +124,7 @@ public class GameWorld extends Stage {
 				this.selected = null;
 				selected.setSelected(false);
 			}else{
+				this.selected.setSelected(false);
 				this.selected = selected;
 				selected.setSelected(true);
 			}	

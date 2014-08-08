@@ -8,7 +8,7 @@ public class Entity {
 	public Entity(int x, int y, Player parent){
 		this.x = x;
 		this.y = y;
-		this.parent = parent;
+		this.setParent(parent);
 	}
 	
 	public int getX() {
@@ -22,6 +22,14 @@ public class Entity {
 	}
 	public void setY(int y) {
 		this.y = y;
+	}
+
+	public Player getParent() {
+		return parent;
+	}
+
+	public void setParent(Player parent) {
+		this.parent = parent;
 	}
 
 }

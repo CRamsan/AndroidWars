@@ -62,7 +62,7 @@ public class OrthoCamController extends InputAdapter {
 	@Override
 	public boolean scrolled(int ammount) {
 		float newZoom = this.camera.zoom + (float) ammount / 20f;
-		if (newZoom >= 0.4f && newZoom <= 1f) {
+		if (newZoom >= 0.2f && newZoom <= 1f) {
 			this.camera.zoom = newZoom;
 			return true;
 		} else {
