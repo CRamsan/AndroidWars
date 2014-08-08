@@ -1,20 +1,27 @@
 package com.cesarandres.aw.model;
 
 public class Entity {
-	private int X; 
-	private int Y;
+	private int x; 
+	private int y;
+	private Player parent;
+	
+	public Entity(int x, int y, Player parent){
+		this.x = x;
+		this.y = y;
+		this.parent = parent;
+	}
 	
 	public int getX() {
-		return X;
+		return x;
 	}
 	public void setX(int x) {
-		X = x;
+		this.x = x;
 	}
 	public int getY() {
-		return Y;
+		return y;
 	}
 	public void setY(int y) {
-		Y = y;
+		this.y = y;
 	}
 
 }

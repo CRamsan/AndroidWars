@@ -3,18 +3,23 @@ package com.cesarandres.aw;
 import java.util.HashSet;
 import java.util.Iterator;
 
-public class Player {
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.cesarandres.aw.model.Player;
+
+public class GamePlayer {
 	private int ID;
 	private int team;
 	private HashSet<GameObject> belongings;
+	private Player player;
 	private GameWorld world;
-
-	public Player(int ID, GameWorld stage) {
+	
+	public GamePlayer(int ID, GameWorld stage) {
 		this.ID = ID;
 		this.belongings = new HashSet<GameObject>();
+		this.player = new Player();
 		this.world = stage;
 		
-		this.addObject(new GameObject());
+		this.addObject(new GameObject(5,5,this), stage);
 	}
 
 	public int getID() {
@@ -37,10 +42,11 @@ public class Player {
 		return belongings;
 	}
 
-	public boolean addObject(GameObject object) {
-		boolean success = this.belongings.add(object);
+	public boolean addObject(GameObject object, Stage world) {
+		boolean success = this.player.getBelongings().add(object.getEntity());
 		if (success) {
-			this.world.addActor(object);
+			this.belongings.add(object);
+			world.addActor(object);
 		}
 		return success;
 	}
@@ -50,5 +56,21 @@ public class Player {
 		while (iter.hasNext()) {
 			iter.next().dispose();
 		}	
+	}
+
+	public Player getPlayer() {
+		return player;
+	}
+
+	public void setPlayer(Player player) {
+		this.player = player;
+	}
+
+	public GameWorld getWorld() {
+		return world;
+	}
+
+	public void setWorld(GameWorld world) {
+		this.world = world;
 	}
 }

@@ -17,19 +17,24 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.cesarandres.aw.model.GameInstance;
 
 public class GameWorld extends Stage {
 
-	private OrthographicCamera camera;
+	private final OrthographicCamera camera;
 
-	private TiledMap map;
-	private TiledMapRenderer renderer;
-	private AssetManager assetManager;
+	private final TiledMap map;
+	private final TiledMapRenderer renderer;
+	private final AssetManager assetManager;
+	private final ShapeRenderer srendered;
 
-	private HashSet<Player> players;
-	private ShapeRenderer srendered;
-	private Vector3 curr = new Vector3();
+	private final HashSet<GamePlayer> players;
+	private GameObject selected;
 
+	private final Vector3 curr = new Vector3();
+
+	private GameInstance game;
+	
 	public GameWorld(OrthographicCamera camera) {
 		super(new ScreenViewport(camera));
 		this.camera = camera;
@@ -45,13 +50,20 @@ public class GameWorld extends Stage {
 		this.renderer = new OrthogonalTiledMapRenderer(map);
 		this.srendered = new ShapeRenderer();
 
-		this.players = new HashSet<Player>();
-
-		this.addPlayer(new Player(0, this));
+		this.players = new HashSet<GamePlayer>();
+		
+		this.setGame(new GameInstance());
+		
+		this.addPlayer(new GamePlayer(0, this));
+		this.addPlayer(new GamePlayer(1, this));
 	}
 
-	public boolean addPlayer(Player player) {
-		return this.players.add(player);
+	public boolean addPlayer(GamePlayer player) {
+		boolean success = this.getGame().getPlayers().add(player.getPlayer());
+		if(success){
+			this.players.add(player);
+		}
+		return success;
 	}
 
 	@Override
@@ -77,9 +89,44 @@ public class GameWorld extends Stage {
 	@Override
 	public void dispose() {
 		super.dispose();
-		Iterator<Player> iter = this.players.iterator();
+		Iterator<GamePlayer> iter = this.players.iterator();
 		while (iter.hasNext()) {
 			iter.next().dispose();
+		}
+	}
+
+	public GameInstance getGame() {
+		return game;
+	}
+
+	public void setGame(GameInstance game) {
+		this.game = game;
+	}
+
+	public GameObject getSelected() {
+		return selected;
+	}
+
+	public void mapClick(int x, int y){
+		if(this.selected != null){
+			this.selected.setGameLocation(x/32, y/32);
+			this.selected.setSelected(false);
+			this.selected = null;
+		}
+	}
+	
+	public void setSelected(GameObject selected) {
+		if(this.selected == null){
+			this.selected = selected;
+			selected.setSelected(true);
+		}else{
+			if(this.selected == selected){
+				this.selected = null;
+				selected.setSelected(false);
+			}else{
+				this.selected = selected;
+				selected.setSelected(true);
+			}	
 		}
 	}
 }

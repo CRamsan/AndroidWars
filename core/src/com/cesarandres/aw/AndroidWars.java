@@ -11,15 +11,14 @@ public class AndroidWars extends ApplicationAdapter {
 	private GameWorld match;
 	private OrthoCamController controller;
 	private GameUI ui;
-	
+			
 	@Override
 	public void create() {				
-		this.ui = new GameUI();
-		
 		OrthographicCamera camera = new OrthographicCamera();
-		
+
+		this.ui = new GameUI();
 		this.match = new GameWorld(camera);
-		this.controller = new OrthoCamController(camera);
+		this.controller = new OrthoCamController(camera, this.match);
 
 		InputMultiplexer multiplexer = new InputMultiplexer();
 		
@@ -29,7 +28,7 @@ public class AndroidWars extends ApplicationAdapter {
 
 		Gdx.input.setInputProcessor(multiplexer);
 	}
-
+	
 	@Override
 	public void render() {
 		Gdx.gl.glClearColor(100f / 255f, 100f / 255f, 250f / 255f, 1f);
