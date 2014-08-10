@@ -3,8 +3,10 @@ package com.cesarandres.aw;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.cesarandres.aw.config.ConfigurationFile;
 
 public class AndroidWars extends ApplicationAdapter {
 
@@ -14,10 +16,14 @@ public class AndroidWars extends ApplicationAdapter {
 			
 	@Override
 	public void create() {				
+		
+		FileHandle file = Gdx.files.internal("map_config.json");
+		ConfigurationFile config = ConfigurationFile.getGameConfiguration(file);
+		
 		OrthographicCamera camera = new OrthographicCamera();
 
 		this.ui = new GameUI();
-		this.match = new GameWorld(camera);
+		this.match = new GameWorld(camera, config);
 		this.controller = new OrthoCamController(camera, this.match);
 
 		InputMultiplexer multiplexer = new InputMultiplexer();

@@ -1,0 +1,40 @@
+{
+	"map_file":"desert.tmx",
+	"max_players":4,
+	"starting_positions":[
+		{
+			"player":0,
+			"positions":[
+				{
+					"type":"HQ",
+					"x":0,
+					"y":4
+				},
+				{
+					"type":"INF",
+					"x":1,
+					"y":5
+				}
+				
+			]
+			
+		},
+		{
+			"player":1,
+			"positions":[
+				{
+					"type":"HQ",
+					"x":7,
+					"y":4
+				},
+				{
+					"type":"INF",
+					"x":0,
+					"y":0
+				}
+				
+			]
+			
+		}
+	]
+}

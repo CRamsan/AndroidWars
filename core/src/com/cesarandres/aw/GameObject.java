@@ -18,7 +18,11 @@ public class GameObject extends Actor {
 	private Entity entity;
 	
 	public GameObject(int x, int y, final GamePlayer parent) {
-		this.texture = new Texture("CWT_INFT.png");
+		if(parent.getID() == 0){
+			this.texture = new Texture("CWT_INFT.png");
+		}else{
+			this.texture = new Texture("CWT_INFT2.png");
+		}
 		TextureRegion[] leftWalkFrames = TextureRegion.split(this.texture, 32,
 				32)[0];
 		TextureRegion[] rightWalkFrames = new TextureRegion[leftWalkFrames.length];

@@ -17,6 +17,9 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.cesarandres.aw.config.ConfigurationFile;
+import com.cesarandres.aw.config.Position;
+import com.cesarandres.aw.config.StartingPosition;
 import com.cesarandres.aw.model.GameInstance;
 
 public class GameWorld extends Stage {
@@ -35,7 +38,7 @@ public class GameWorld extends Stage {
 
 	private GameInstance game;
 	
-	public GameWorld(OrthographicCamera camera) {
+	public GameWorld(OrthographicCamera camera, ConfigurationFile config) {
 		super(new ScreenViewport(camera));
 		this.camera = camera;
 		this.camera.setToOrtho(false);
@@ -44,7 +47,7 @@ public class GameWorld extends Stage {
 		this.assetManager = new AssetManager();
 		this.assetManager.setLoader(TiledMap.class, new TmxMapLoader(
 				new InternalFileHandleResolver()));
-		this.assetManager.load("desert.tmx", TiledMap.class);
+		this.assetManager.load(config.getMapFile(), TiledMap.class);
 		this.assetManager.finishLoading();
 		this.map = assetManager.get("desert.tmx");
 		this.renderer = new OrthogonalTiledMapRenderer(map);
@@ -54,8 +57,14 @@ public class GameWorld extends Stage {
 		
 		this.setGame(new GameInstance());
 		
-		this.addPlayer(new GamePlayer(1, this));
-		this.addPlayer(new GamePlayer(0, this));
+		for(StartingPosition positions : config.getStartingPositions()){
+			GamePlayer player = new GamePlayer(positions.getPlayer(), this);
+			for(Position position : positions.getPositions()){
+				GameObject object = new GameObject(position.getX(),position.getY(), player);
+				player.addObject(object, this);
+			}
+			this.addPlayer(player);
+		}
 	}
 
 	public boolean addPlayer(GamePlayer player) {

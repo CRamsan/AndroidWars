@@ -1,6 +1,11 @@
 package com.cesarandres.aw.model;
 
 public class Entity {
+	
+	public enum Type {
+		HQ, INF
+	}
+	
 	private int x; 
 	private int y;
 	private Player parent;

@@ -18,8 +18,6 @@ public class GamePlayer {
 		this.belongings = new HashSet<GameObject>();
 		this.player = new Player(ID);
 		this.world = stage;
-		
-		this.addObject(new GameObject(5,5,this), stage);
 	}
 
 	public int getID() {
