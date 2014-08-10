@@ -63,7 +63,7 @@
   <tile id="44" terrain="0,2,2,2"/>
   <tile id="45" terrain="0,0,0,0" probability="0">
    <properties>
-    <property name="terrain" value="blocked"/>
+    <property name="asdasd" value=""/>
    </properties>
   </tile>
   <tile id="46" terrain="0,0,0,0" probability="0.5"/>

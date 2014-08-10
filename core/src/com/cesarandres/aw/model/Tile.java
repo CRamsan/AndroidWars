@@ -1,8 +1,13 @@
 package com.cesarandres.aw.model;
 
 public class Tile  {
-	public Building building;
-	public Unit unit;
+	private int cost;
+	private Building building;
+	private Unit unit;
+	
+	public Tile(int cost){
+		this.cost = cost;
+	}
 	
 	public Building getBuilding() {
 		return building;
@@ -15,6 +20,12 @@ public class Tile  {
 	}
 	public void setUnit(Unit unit) {
 		this.unit = unit;
+	}
+	public int getCost() {
+		return cost;
+	}
+	public void setCost(int cost) {
+		this.cost = cost;
 	}
 
 }
