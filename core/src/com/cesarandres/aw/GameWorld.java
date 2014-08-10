@@ -54,8 +54,8 @@ public class GameWorld extends Stage {
 		
 		this.setGame(new GameInstance());
 		
-		this.addPlayer(new GamePlayer(0, this));
 		this.addPlayer(new GamePlayer(1, this));
+		this.addPlayer(new GamePlayer(0, this));
 	}
 
 	public boolean addPlayer(GamePlayer player) {
@@ -109,7 +109,7 @@ public class GameWorld extends Stage {
 
 	public void mapClick(int x, int y){
 		if(this.selected != null){
-			this.selected.setGameLocation(x/32, y/32);
+			this.selected.setGameLocation(x/32, y/32, 0);
 			this.selected.setSelected(false);
 			this.selected = null;
 		}

@@ -3,19 +3,20 @@ package com.cesarandres.aw.model;
 import java.util.HashSet;
 
 public class Player {
-	protected int team;
+	protected int ID;
 	protected int money;
 	protected HashSet<Entity> belongings;
 
-	public Player(){
+	public Player(int ID){
+		this.ID = ID;
 		this.belongings = new HashSet<Entity>();
 	}
 	
-	public int getTeam() {
-		return team;
+	public int getID() {
+		return ID;
 	}
-	public void setTeam(int team) {
-		this.team = team;
+	public void setID(int ID) {
+		this.ID = ID;
 	}
 	public int getMoney() {
 		return money;

@@ -80,11 +80,15 @@ public class GameObject extends Actor {
 		this.entity = entity;
 	}
 	
-	public void setGameLocation(int x, int y){
-		this.getEntity().setX(x);
-		this.getEntity().setY(y);
-		this.setX(x * 32);
-		this.setY(y * 32);
+	public boolean setGameLocation(int x, int y, int parentId){
+		if(parentId == this.getEntity().getParent().getID()){
+			this.getEntity().setX(x);
+			this.getEntity().setY(y);
+			this.setX(x * 32);
+			this.setY(y * 32);
+			return true;
+		}
+		return false;
 	}
 
 	public boolean isSelected() {
