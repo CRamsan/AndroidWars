@@ -40,12 +40,12 @@
   <tile id="29" terrain="0,0,0,0"/>
   <tile id="30" terrain="0,0,0,0" probability="0.5">
    <properties>
-    <property name="terrain" value="blocked"/>
+    <property name="isBlocked" value="blocked"/>
    </properties>
   </tile>
   <tile id="31" terrain="0,0,0,0" probability="0.5">
    <properties>
-    <property name="terrain" value="blocked"/>
+    <property name="isBlocked" value="blocked"/>
    </properties>
   </tile>
   <tile id="32" terrain="0,2,0,2"/>
@@ -63,7 +63,7 @@
   <tile id="44" terrain="0,2,2,2"/>
   <tile id="45" terrain="0,0,0,0" probability="0">
    <properties>
-    <property name="terrain" value="blocked"/>
+    <property name="isBlocked" value="blocked"/>
    </properties>
   </tile>
   <tile id="46" terrain="0,0,0,0" probability="0.5"/>
@@ -71,7 +71,7 @@
  </tileset>
  <layer name="Ground" width="40" height="40">
   <data encoding="base64" compression="zlib">
-   eJzVmGlTAjEMQKOIFypeiIoHuqggsMP//3WmA5mtmbRN17bghzfDUaavSUmzfQGAl4xcIH3kMvM8bagFv9cd8Pov8TOxukOGyP0O+EjsIftIh3nnmu8BeVQyQk6QU6RXKB5vyLuSKqPf1BG7JTJBvpGPLfpJzDZOlTKWJfw+hfxu228leNn5XcB6/y8L+/E9x9+H4sX3ZQo/6X8wZfGj1yE/HtdU8fti78knNn6588s9ObNN/rTME/gdbTiG5izy0VGOI57/6NeHpr+gtfroKcdJv2vjN4Smv7hCrgPcKMdJv8u590ozBrnPaeNJPc0og2OKuFHdqTxjYvqy1GulujMXvqvZGrTnj2+tsRxCU6OkWI2UfsZpBb97kBBSreuwMfwZiLtU0PRmqfxoX0q1jteykN9CGcMYP4ob1f8YPylWxjHUj9n9RcjPjtstrGvsQOnncoztLXx+dEYMLB/XWe96BrfzOYn0pVy7/od2fp/Af9a7/Ox+Zw7xz348ZvY8FCueW/KjtRjOHX6uOqntzTR+PLf0GY21ib1jqSPHS348tyaephehexVDN6HfWOnn6qGoT2qT31TxO7PmdkFObfJbW9ifh+6NpD0VQ4yf73tXjkv5tYX2fNcxv4sDKHsHqfEkp23ejUo1hNx27b7Wdi3p9gMHMaqf
+   eJzVmOtSwkAMRqN4R8UbolaxWlQQ6PD+T2d2INOYyV5tF/xxRoHt9PTLdjftGADGHXKJDJCrjs+TQq34ve6A13/Jz2R1j4yQhx3w0dhD9pGe8O7qfI/IUyAFcoqcIf1Mebwh74FUHfpNLdktkQnyjXxs0U9jtnGqArPM4fep1HfbfivFi9d3Aev5v8zsJ+ec/OzLS87LNvy0+2Aq8qP/fX4y17by+xKfySc2v67rKz0ls039Qpm34He84QSavchFL3Ac8fJHvwE0/QVdq4t+4DjtuBS/ETT9xTVy4+E2cJx2XJdzLzcl6H1Oiif1NEUHjm3kRutO5RgT05e1fa207syV32pxDaH7j+taYzmCZo3SsioC/YzTCn73ID60ta4nxshnIOlSQdObteVH81Jb6+Ra5vNbBGYY40e50fof46dlZRx9/RjvL3x+PLc7WK+xw0A/m2Nsb+Hyoz1iyHxse73tGZzXcxLpS7W23Ye8vs/g3uttfrzfmUP8s5/MjJ+HspK1JT+6FsOFxc+2Tob2ZvzY0uIna0vf0VhO7DuWOnK85idra/I0vQi9VzEctuhXBvrZeijqk1Lqm5of9THkd87ObYOcUupbMzQPX36pxPi5frfVOJdfKiZfPt9DOYC87yDp3nR5klMOr5L95WhrCLnt2vta7prT7Qc5+aq1
   </data>
  </layer>
 </map>

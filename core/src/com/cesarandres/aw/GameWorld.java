@@ -13,7 +13,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
-import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -69,22 +68,21 @@ public class GameWorld extends Stage {
 		int mapWidth = prop.get("width", Integer.class);
 		int mapHeight = prop.get("height", Integer.class);
 		this.map = new com.cesarandres.aw.model.TiledMap(mapWidth, mapHeight);
-		
-		TiledMapTileLayer layer = (TiledMapTileLayer)this.gameMap.getLayers().get(0);
-		for(int i = 0; i < layer.getHeight(); i++){
-			for(int j = 0; j < layer.getWidth(); j++){
-	            if(layer.getCell(j, i).getTile().getProperties().containsKey("terrain")) {
-	            	this.map.getTerrain()[j][i] = new Tile(1);
-	            }else{
-	            	this.map.getTerrain()[j][i] = new Tile(1);
-	            }
-				
+
+		TiledMapTileLayer layer = (TiledMapTileLayer) this.gameMap.getLayers()
+				.get(0);
+		for (int i = 0; i < layer.getHeight(); i++) {
+			for (int j = 0; j < layer.getWidth(); j++) {
+				if (layer.getCell(j, i).getTile().getProperties()
+						.containsKey("isBlocked")) {
+					this.map.getTerrain()[j][i] = new Tile(100);
+				} else {
+					this.map.getTerrain()[j][i] = new Tile(1);
+				}
+
 			}
 		}
-		
 
-
-	
 		this.pathFinder = new AStarPathFinder(this.map, false);
 
 		this.players = new HashSet<GamePlayer>();
@@ -95,7 +93,7 @@ public class GameWorld extends Stage {
 			for (Position position : positions.getPositions()) {
 				GameObject object = new GameObject(position.getX(),
 						position.getY(), player);
-				player.addObject(object, this);
+				player.addObject(position.getX(), position.getY(), object, this);
 			}
 			this.addPlayer(player);
 		}
@@ -154,11 +152,14 @@ public class GameWorld extends Stage {
 	public void mapClick(int x, int y) {
 		if (this.selected != null) {
 			Path path = this.pathFinder.findPath(10, this.selected.getEntity()
-					.getX(), this.selected.getEntity().getY(), x/32, y/32);
+					.getX(), this.selected.getEntity().getY(), x / 32, y / 32);
 			if (path != null) {
+				System.out.println("Path found");
 				this.selected.setPath(path);
 				this.selected.setSelected(false);
 				this.selected = null;
+			} else {
+				System.out.println("Path NOT found");
 			}
 		}
 	}
@@ -186,6 +187,7 @@ public class GameWorld extends Stage {
 	public void addMapObject(int x, int y, GameObject object) {
 		this.mapObjects.put(x, y, object);
 		this.map.addMapObject(x, y, object);
+		this.addActor(object);
 	}
 
 	public GameObject getMapObject(int x, int y, GameObject object) {

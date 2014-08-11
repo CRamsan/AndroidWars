@@ -40,11 +40,11 @@ public class GamePlayer {
 		return belongings;
 	}
 
-	public boolean addObject(GameObject object, Stage world) {
+	public boolean addObject(int x, int y, GameObject object, GameWorld world) {
 		boolean success = this.player.getBelongings().add(object.getEntity());
 		if (success) {
 			this.belongings.add(object);
-			world.addActor(object);
+			world.addMapObject(x, y, object);
 		}
 		return success;
 	}

@@ -46,13 +46,11 @@ public class OrthoCamController extends InputAdapter {
 	
 	@Override
 	public boolean touchDown (int screenX, int screenY, int pointer, int button) {
-		System.out.println("camera down");
 		return false;
 	}
 
 	@Override
 	public boolean touchUp(int x, int y, int pointer, int button) {
-		System.out.println("camera up");
 		this.camera.unproject(this.curr.set(x, y, 0));
 		this.world.mapClick((int)this.curr.x, (int)this.curr.y);
 		this.last.set(-1, -1, -1);
@@ -61,8 +59,8 @@ public class OrthoCamController extends InputAdapter {
 
 	@Override
 	public boolean scrolled(int ammount) {
-		float newZoom = this.camera.zoom + (float) ammount / 20f;
-		if (newZoom >= 0.2f && newZoom <= 1f) {
+		float newZoom = this.camera.zoom + (float) ammount / 50f;
+		if (newZoom >= 0f && newZoom <= 5f) {
 			this.camera.zoom = newZoom;
 			return true;
 		} else {

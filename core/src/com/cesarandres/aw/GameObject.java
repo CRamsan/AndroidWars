@@ -1,12 +1,5 @@
 package com.cesarandres.aw;
 
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.color;
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.delay;
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.moveTo;
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.rotateTo;
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
-
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -16,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.cesarandres.aw.model.Entity;
 import com.cesarandres.aw.util.astart.Path;
 
@@ -51,14 +45,12 @@ public class GameObject extends Actor {
 		this.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y,
 					int pointer, int button) {
-				System.out.println("down");
 				return true;
 			}
 
 			public void touchUp(InputEvent event, float x, float y,
 					int pointer, int button) {
 				parent.getWorld().setSelected(GameObject.this);
-				System.out.println("up");
 			}
 		});
 
@@ -78,6 +70,7 @@ public class GameObject extends Actor {
 
 	@Override
 	public void act(float delta) {
+		super.act(delta);
 		stateTime += delta;
 	}
 
@@ -93,15 +86,11 @@ public class GameObject extends Actor {
 		this.entity = entity;
 	}
 
-	public boolean setGameLocation(int x, int y, int parentId) {
-		if (parentId == this.getEntity().getParent().getID()) {
-			this.getEntity().setX(x);
-			this.getEntity().setY(y);
-			this.setX(x * 32);
-			this.setY(y * 32);
-			return true;
-		}
-		return false;
+	public void setGameLocation(int x, int y) {
+		this.getEntity().setX(x);
+		this.getEntity().setY(y);
+		this.setX(x * 32);
+		this.setY(y * 32);
 	}
 
 	public boolean isSelected() {
@@ -118,16 +107,26 @@ public class GameObject extends Actor {
 	}
 
 	public void setPath(Path path) {
-		MoveToAction action = Actions.action(MoveToAction.class);
-		float x,y;
+		SequenceAction sequence = new SequenceAction();
+		float x = 0, y = 0;
+		MoveToAction action;
 		for (int i = 0; i < path.getLength(); i++) {
 			x = path.getStep(i).getX() * 32;
 			y = path.getStep(i).getY() * 32;
-			
-			action.setPosition(x,y);
-			action.setDuration(0.5f);
-		}			
-		this.addAction(action);
+			action = new MoveToAction();
+			action.setPosition(x, y);
+			action.setDuration(0.1f);
+			sequence.addAction(action);
+		}
+		final int final_x = (int) (x / 32);
+		final int final_y = (int) (y / 32);
+		sequence.addAction(Actions.run(new Runnable() {
+			@Override
+			public void run() {
+				GameObject.this.setGameLocation(final_x, final_y);
+			}
 
+		}));
+		this.addAction(sequence);
 	}
 }
