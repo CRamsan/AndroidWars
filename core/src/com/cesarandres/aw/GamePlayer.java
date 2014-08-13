@@ -3,7 +3,6 @@ package com.cesarandres.aw;
 import java.util.HashSet;
 import java.util.Iterator;
 
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.cesarandres.aw.model.Player;
 
 public class GamePlayer {
@@ -11,42 +10,34 @@ public class GamePlayer {
 	private int team;
 	private HashSet<GameObject> belongings;
 	private Player player;
-	private GameWorld world;
+	private static GameWorld world;
 	
-	public GamePlayer(int ID, GameWorld stage) {
+	public GamePlayer(int ID, int team, GameWorld stage) {
 		this.ID = ID;
+		this.team = team;
 		this.belongings = new HashSet<GameObject>();
-		this.player = new Player(ID);
-		this.world = stage;
+		this.player = new Player(ID, team);
+		GamePlayer.world = stage;
 	}
 
 	public int getID() {
 		return ID;
 	}
 
-	public void setID(int iD) {
-		ID = iD;
-	}
-
 	public int getTeam() {
 		return team;
-	}
-
-	public void setTeam(int team) {
-		this.team = team;
 	}
 
 	public HashSet<GameObject> getBelongings() {
 		return belongings;
 	}
 
+	//TODO FIx return value
 	public boolean addObject(int x, int y, GameObject object, GameWorld world) {
-		boolean success = this.player.getBelongings().add(object.getEntity());
-		if (success) {
-			this.belongings.add(object);
-			world.addMapObject(x, y, object);
-		}
-		return success;
+		this.player.addEntity(object.getEntity());
+		this.belongings.add(object);
+		world.addActor(object);
+		return true;
 	}
 	
 	public void dispose () {
@@ -60,15 +51,7 @@ public class GamePlayer {
 		return player;
 	}
 
-	public void setPlayer(Player player) {
-		this.player = player;
-	}
-
 	public GameWorld getWorld() {
 		return world;
-	}
-
-	public void setWorld(GameWorld world) {
-		this.world = world;
 	}
 }

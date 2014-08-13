@@ -23,8 +23,6 @@ import com.cesarandres.aw.config.ConfigurationFile;
 import com.cesarandres.aw.config.Position;
 import com.cesarandres.aw.config.StartingPosition;
 import com.cesarandres.aw.model.GameInstance;
-import com.cesarandres.aw.model.Tile;
-import com.cesarandres.aw.util.astart.AStarPathFinder;
 import com.cesarandres.aw.util.astart.Path;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
@@ -34,7 +32,6 @@ public class GameWorld extends Stage {
 	private final OrthographicCamera camera;
 
 	private final TiledMap gameMap;
-	private final com.cesarandres.aw.model.TiledMap map;
 	private final TiledMapRenderer renderer;
 	private final AssetManager assetManager;
 	private final ShapeRenderer srendered;
@@ -43,7 +40,6 @@ public class GameWorld extends Stage {
 	private final HashSet<GamePlayer> players;
 	private GameObject selected;
 
-	private AStarPathFinder pathFinder;
 	private final Vector3 curr = new Vector3();
 
 	private GameInstance game;
@@ -67,40 +63,40 @@ public class GameWorld extends Stage {
 		MapProperties prop = this.gameMap.getProperties();
 		int mapWidth = prop.get("width", Integer.class);
 		int mapHeight = prop.get("height", Integer.class);
-		this.map = new com.cesarandres.aw.model.TiledMap(mapWidth, mapHeight);
 
+		this.game = new GameInstance(mapWidth, mapHeight, config.getMaxPlayers());
 		TiledMapTileLayer layer = (TiledMapTileLayer) this.gameMap.getLayers()
 				.get(0);
 		for (int i = 0; i < layer.getHeight(); i++) {
 			for (int j = 0; j < layer.getWidth(); j++) {
 				if (layer.getCell(j, i).getTile().getProperties()
 						.containsKey("isBlocked")) {
-					this.map.getTerrain()[j][i] = new Tile(100);
+					this.game.setTerrain(j, i, 100);
 				} else {
-					this.map.getTerrain()[j][i] = new Tile(1);
+					this.game.setTerrain(j, i, 1);
 				}
 
 			}
 		}
 
-		this.pathFinder = new AStarPathFinder(this.map, false);
-
+		this.game.initializePAthFinder();
 		this.players = new HashSet<GamePlayer>();
-		this.setGame(new GameInstance());
 
+		int counter = 0;
 		for (StartingPosition positions : config.getStartingPositions()) {
-			GamePlayer player = new GamePlayer(positions.getPlayer(), this);
+			GamePlayer player = new GamePlayer(positions.getPlayer(), counter, this);
 			for (Position position : positions.getPositions()) {
+				this.addPlayer(player);
 				GameObject object = new GameObject(position.getX(),
-						position.getY(), player);
-				player.addObject(position.getX(), position.getY(), object, this);
+						position.getY(), this);
+				this.addMapObject(position.getX(), position.getY(), player.getID(),object);
 			}
-			this.addPlayer(player);
+			counter++;
 		}
 	}
 
 	public boolean addPlayer(GamePlayer player) {
-		boolean success = this.getGame().getPlayers().add(player.getPlayer());
+		boolean success = this.getGame().addPlayer(player.getPlayer());
 		if (success) {
 			this.players.add(player);
 		}
@@ -141,18 +137,13 @@ public class GameWorld extends Stage {
 		return game;
 	}
 
-	public void setGame(GameInstance game) {
-		this.game = game;
-	}
-
 	public GameObject getSelected() {
 		return selected;
 	}
 
 	public void mapClick(int x, int y) {
 		if (this.selected != null) {
-			Path path = this.pathFinder.findPath(10, this.selected.getEntity()
-					.getX(), this.selected.getEntity().getY(), x / 32, y / 32);
+			Path path = this.game.createPath(this.selected.getEntity().getX(), this.selected.getEntity().getY(), x / 32, y / 32, 10);
 			if (path != null) {
 				System.out.println("Path found");
 				this.selected.setPath(path);
@@ -184,9 +175,9 @@ public class GameWorld extends Stage {
 		return !this.mapObjects.contains(x, y);
 	}
 
-	public void addMapObject(int x, int y, GameObject object) {
+	public void addMapObject(int x, int y, int player, GameObject object) {
 		this.mapObjects.put(x, y, object);
-		this.map.addMapObject(x, y, object);
+		this.game.addEntity(x, y, player, object.getEntity());
 		this.addActor(object);
 	}
 
@@ -195,10 +186,17 @@ public class GameWorld extends Stage {
 	}
 
 	public void removeMapObject(int x, int y) {
-		this.mapObjects.remove(x, y);
-		this.map.removeMapObject(x, y);
+		GameObject object = this.mapObjects.remove(x, y);
+		object.remove();
+		this.game.removeEntity(x, y);
 	}
 
+	public void moveMapObject(int ox, int oy, int dx, int dy, GameObject object) {
+		this.mapObjects.remove(ox, oy);
+		this.mapObjects.put(dx, dy, object);
+		object.setGameLocation(dx, dy);
+	}
+	
 	public TiledMap getGameMap() {
 		return gameMap;
 	}

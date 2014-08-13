@@ -6,14 +6,9 @@
 			"player":0,
 			"positions":[
 				{
-					"type":"HQ",
-					"x":0,
-					"y":4
-				},
-				{
 					"type":"INF",
-					"x":1,
-					"y":5
+					"x":6,
+					"y":3
 				}
 				
 			]
@@ -23,14 +18,9 @@
 			"player":1,
 			"positions":[
 				{
-					"type":"HQ",
-					"x":7,
-					"y":4
-				},
-				{
 					"type":"INF",
-					"x":0,
-					"y":0
+					"x":6,
+					"y":4
 				}
 				
 			]

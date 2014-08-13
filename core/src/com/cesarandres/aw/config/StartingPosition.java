@@ -5,14 +5,14 @@ import java.util.List;
 
 public class StartingPosition {
 
-	private Integer player;
+	private int player;
 	private List<Position> positions = new ArrayList<Position>();
 
-	public Integer getPlayer() {
+	public int getPlayer() {
 		return player;
 	}
 
-	public void setPlayer(Integer player) {
+	public void setPlayer(int player) {
 		this.player = player;
 	}
 

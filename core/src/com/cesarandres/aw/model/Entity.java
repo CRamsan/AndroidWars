@@ -6,14 +6,13 @@ public class Entity {
 		HQ, INF
 	}
 	
+	private int team;
 	private int x; 
 	private int y;
-	private Player parent;
 	
-	public Entity(int x, int y, Player parent){
+	public Entity(int x, int y){
 		this.x = x;
 		this.y = y;
-		this.setParent(parent);
 	}
 	
 	public int getX() {
@@ -29,12 +28,11 @@ public class Entity {
 		this.y = y;
 	}
 
-	public Player getParent() {
-		return parent;
+	public int getTeam() {
+		return team;
 	}
 
-	public void setParent(Player parent) {
-		this.parent = parent;
+	public void setTeam(int team) {
+		this.team = team;
 	}
-
 }

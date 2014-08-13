@@ -4,30 +4,29 @@ import java.util.HashSet;
 
 public class Player {
 	protected int ID;
+	protected int team;
 	protected int money;
 	protected HashSet<Entity> belongings;
 
-	public Player(int ID){
+	public Player(int ID, int team){
 		this.ID = ID;
+		this.team = team;
 		this.belongings = new HashSet<Entity>();
 	}
 	
 	public int getID() {
 		return ID;
 	}
-	public void setID(int ID) {
-		this.ID = ID;
-	}
 	public int getMoney() {
 		return money;
 	}
-	public void setMoney(int money) {
-		this.money = money;
+	public int getTeam() {
+		return team;
 	}
-	public HashSet<Entity> getBelongings() {
-		return belongings;
+	public boolean addEntity(Entity entity) {
+		return belongings.add(entity);
 	}
-	public void setBelongings(HashSet<Entity> belongings) {
-		this.belongings = belongings;
-	}
+	public boolean removeEntity(Entity entity) {
+		return belongings.remove(entity);
+	}	
 }

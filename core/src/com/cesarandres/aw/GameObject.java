@@ -20,13 +20,11 @@ public class GameObject extends Actor {
 	private Animation rightWalk;
 	private boolean isSelected;
 	private Entity entity;
+	private static GameWorld world;
 
-	public GameObject(int x, int y, final GamePlayer parent) {
-		if (parent.getID() == 0) {
-			this.texture = new Texture("CWT_INFT.png");
-		} else {
-			this.texture = new Texture("CWT_INFT2.png");
-		}
+	public GameObject(int x, int y, GameWorld world) {
+		this.texture = new Texture("CWT_INFT.png");
+		GameObject.world = world;
 		TextureRegion[] leftWalkFrames = TextureRegion.split(this.texture, 32,
 				32)[0];
 		TextureRegion[] rightWalkFrames = new TextureRegion[leftWalkFrames.length];
@@ -50,11 +48,11 @@ public class GameObject extends Actor {
 
 			public void touchUp(InputEvent event, float x, float y,
 					int pointer, int button) {
-				parent.getWorld().setSelected(GameObject.this);
+				GameObject.world.setSelected(GameObject.this);
 			}
 		});
 
-		this.setEntity(new Entity(x, y, parent.getPlayer()));
+		this.setEntity(new Entity(x, y));
 
 		this.setX(x * 32);
 		this.setY(y * 32);
@@ -120,10 +118,13 @@ public class GameObject extends Actor {
 		}
 		final int final_x = (int) (x / 32);
 		final int final_y = (int) (y / 32);
+		final int initial_x = (int) (getEntity().getX() / 32);
+		final int initial_y = (int) (getEntity().getY() / 32);
 		sequence.addAction(Actions.run(new Runnable() {
 			@Override
 			public void run() {
-				GameObject.this.setGameLocation(final_x, final_y);
+				GameObject.world.moveMapObject(initial_x, initial_y, final_x,
+						final_y, GameObject.this);
 			}
 
 		}));
