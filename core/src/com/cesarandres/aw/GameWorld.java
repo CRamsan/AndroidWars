@@ -22,7 +22,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.cesarandres.aw.config.ConfigurationFile;
 import com.cesarandres.aw.config.Position;
 import com.cesarandres.aw.config.StartingPosition;
-import com.cesarandres.aw.model.GameInstance;
+import com.cesarandres.aw.util.astart.AStarPathFinder;
 import com.cesarandres.aw.util.astart.Path;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
@@ -39,11 +39,13 @@ public class GameWorld extends Stage {
 	private Table<Integer, Integer, GameObject> mapObjects;
 	private final HashSet<GamePlayer> players;
 	private GameObject selected;
-
+	private int[][] terrain;
+	private AStarPathFinder pathFinder;
+	
 	private final Vector3 curr = new Vector3();
-
-	private GameInstance game;
-
+	private int mapWidth;
+	private int mapHeight;
+	
 	public GameWorld(OrthographicCamera camera, ConfigurationFile config) {
 		super(new ScreenViewport(camera));
 		this.camera = camera;
@@ -61,25 +63,25 @@ public class GameWorld extends Stage {
 
 		this.mapObjects = HashBasedTable.create();
 		MapProperties prop = this.gameMap.getProperties();
-		int mapWidth = prop.get("width", Integer.class);
-		int mapHeight = prop.get("height", Integer.class);
+		this.mapWidth = prop.get("width", Integer.class);
+		this.mapHeight = prop.get("height", Integer.class);
 
-		this.game = new GameInstance(mapWidth, mapHeight, config.getMaxPlayers());
 		TiledMapTileLayer layer = (TiledMapTileLayer) this.gameMap.getLayers()
 				.get(0);
+		this.terrain = new int[mapWidth][mapHeight];
 		for (int i = 0; i < layer.getHeight(); i++) {
 			for (int j = 0; j < layer.getWidth(); j++) {
 				if (layer.getCell(j, i).getTile().getProperties()
 						.containsKey("isBlocked")) {
-					this.game.setTerrain(j, i, 100);
+					this.terrain[j][i] = 100;
 				} else {
-					this.game.setTerrain(j, i, 1);
+					this.terrain[j][i] = 1;
 				}
 
 			}
 		}
 
-		this.game.initializePAthFinder();
+		this.pathFinder = new AStarPathFinder(this, false);
 		this.players = new HashSet<GamePlayer>();
 
 		int counter = 0;
@@ -96,11 +98,7 @@ public class GameWorld extends Stage {
 	}
 
 	public boolean addPlayer(GamePlayer player) {
-		boolean success = this.getGame().addPlayer(player.getPlayer());
-		if (success) {
-			this.players.add(player);
-		}
-		return success;
+		return this.players.add(player);
 	}
 
 	@Override
@@ -133,17 +131,13 @@ public class GameWorld extends Stage {
 		}
 	}
 
-	public GameInstance getGame() {
-		return game;
-	}
-
 	public GameObject getSelected() {
 		return selected;
 	}
 
 	public void mapClick(int x, int y) {
 		if (this.selected != null) {
-			Path path = this.game.createPath(this.selected.getEntity().getX(), this.selected.getEntity().getY(), x / 32, y / 32, 10);
+			Path path = this.pathFinder.findPath(10, this.selected.getGameX(), this.selected.getGameY(), x / 32, y / 32);
 			if (path != null) {
 				System.out.println("Path found");
 				this.selected.setPath(path);
@@ -177,7 +171,6 @@ public class GameWorld extends Stage {
 
 	public void addMapObject(int x, int y, int player, GameObject object) {
 		this.mapObjects.put(x, y, object);
-		this.game.addEntity(x, y, player, object.getEntity());
 		this.addActor(object);
 	}
 
@@ -188,7 +181,6 @@ public class GameWorld extends Stage {
 	public void removeMapObject(int x, int y) {
 		GameObject object = this.mapObjects.remove(x, y);
 		object.remove();
-		this.game.removeEntity(x, y);
 	}
 
 	public void moveMapObject(int ox, int oy, int dx, int dy, GameObject object) {
@@ -197,7 +189,15 @@ public class GameWorld extends Stage {
 		object.setGameLocation(dx, dy);
 	}
 	
-	public TiledMap getGameMap() {
-		return gameMap;
+	public int getMapWidth() {
+		return this.mapWidth;
+	}
+	
+	public int getMapHeight() {
+		return this.mapHeight;
+	}
+	
+	public int getTerrain(int x, int y){
+		return this.terrain[x][y];
 	}
 }

@@ -3,7 +3,7 @@ package com.cesarandres.aw.util.astart;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import com.cesarandres.aw.model.TiledMap;
+import com.cesarandres.aw.GameWorld;
 
 /**
  * A path finder implementation that uses the AStar heuristic based algorithm to
@@ -17,7 +17,7 @@ public class AStarPathFinder {
 	/** The set of nodes that we do not yet consider fully searched */
 	protected SortedList open = new SortedList();
 	/** The map being searched */
-	protected TiledMap map;
+	protected GameWorld map;
 	/** The complete set of nodes across the map */
 	protected Node[][] nodes;
 	/** True if we allow diaganol movement */
@@ -31,17 +31,17 @@ public class AStarPathFinder {
 	 * @param allowDiagMovement
 	 *            True if the search should try diaganol movement
 	 */
-	public AStarPathFinder(TiledMap map, boolean allowDiagMovement) {
+	public AStarPathFinder(GameWorld map, boolean allowDiagMovement) {
 		this.map = map;
 		this.allowDiagMovement = allowDiagMovement;
 
-		int width = map.getWidth();
-		int height = map.getHeight();
+		int width = map.getMapWidth();
+		int height = map.getMapHeight();
 
 		nodes = new Node[width][height];
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
-				nodes[x][y] = new Node(x, y, map.getTerrain()[x][y].getCost());
+				nodes[x][y] = new Node(x, y, map.getTerrain(x, y));
 			}
 		}
 	}

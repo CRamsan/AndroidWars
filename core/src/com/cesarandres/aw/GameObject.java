@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
-import com.cesarandres.aw.model.Entity;
 import com.cesarandres.aw.util.astart.Path;
 
 public class GameObject extends Actor {
@@ -19,7 +18,6 @@ public class GameObject extends Actor {
 	private Animation leftWalk;
 	private Animation rightWalk;
 	private boolean isSelected;
-	private Entity entity;
 	private static GameWorld world;
 
 	public GameObject(int x, int y, GameWorld world) {
@@ -52,8 +50,6 @@ public class GameObject extends Actor {
 			}
 		});
 
-		this.setEntity(new Entity(x, y));
-
 		this.setX(x * 32);
 		this.setY(y * 32);
 	}
@@ -76,21 +72,19 @@ public class GameObject extends Actor {
 		texture.dispose();
 	}
 
-	public Entity getEntity() {
-		return entity;
-	}
-
-	public void setEntity(Entity entity) {
-		this.entity = entity;
-	}
-
 	public void setGameLocation(int x, int y) {
-		this.getEntity().setX(x);
-		this.getEntity().setY(y);
 		this.setX(x * 32);
 		this.setY(y * 32);
 	}
 
+	public int getGameX(){
+		return (int) (this.getX() / 32);
+	}
+	
+	public int getGameY(){
+		return (int) (this.getY() / 32);
+	}
+	
 	public boolean isSelected() {
 		return isSelected;
 	}
@@ -116,10 +110,10 @@ public class GameObject extends Actor {
 			action.setDuration(0.1f);
 			sequence.addAction(action);
 		}
+		final int initial_x = getGameX();
+		final int initial_y = getGameY();
 		final int final_x = (int) (x / 32);
 		final int final_y = (int) (y / 32);
-		final int initial_x = (int) (getEntity().getX() / 32);
-		final int initial_y = (int) (getEntity().getY() / 32);
 		sequence.addAction(Actions.run(new Runnable() {
 			@Override
 			public void run() {
