@@ -45,6 +45,8 @@ project(":core") {
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+	compile group: 'com.google.guava', name: 'guava', version: '15.0'
+	compile 'com.google.code.gson:gson:1.7.2'
     }
 }
 
