@@ -119,6 +119,7 @@ public class GameObject extends Actor {
 			public void run() {
 				GameObject.world.moveMapObject(initial_x, initial_y, final_x,
 						final_y, GameObject.this);
+				new GameDialog(world);
 			}
 
 		}));
